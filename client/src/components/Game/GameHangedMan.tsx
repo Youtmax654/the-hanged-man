@@ -60,7 +60,7 @@ const GameHangedMan: React.FC<GameHangedManProps> = ({ step }) => {
 
   return (
     // <div className="absolute bottom-0 left-20">
-    <div>
+    <div className="relative">
       <Image src="/Stand.svg" alt="Stand" width={400} height={790} />
       {visibleManParts}
     </div>

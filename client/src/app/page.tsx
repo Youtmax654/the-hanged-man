@@ -9,20 +9,36 @@ import Button from "@/components/UI/Button";
 import axios from "axios";
 import { useState } from "react";
 
+const isALetter = (l: string) => {
+  return l.length === 1 && l.match(/[a-zA-Z]/i);
+};
+
 export default function Home() {
   const [page, setPage] = useState("Main");
   const [step, setStep] = useState(0);
   const [word, setWord] = useState("");
 
-  const handlePlay = () => {
-    axios.get("http://localhost:8080/api/fr/word").then((response) => {
-      setWord(response.data.word);
-    });
-    setPage("Game");
+  const addManPart = () => {
+    setStep((prevStep) => prevStep + 1);
   };
 
-  const addManPart = () => {
-    setStep(step + 1);
+  const handlePlay = () => {
+    axios.get("http://localhost:8080/api/fr/word").then((response) => {
+      const randomWord = response.data.word.toUpperCase();
+      setWord(randomWord);
+      setPage("Game");
+
+      window.addEventListener("keydown", function (e) {
+        if (!isALetter(e.key)) return;
+        if (randomWord.includes(e.key.toUpperCase())) {
+          console.log("good");
+        } else {
+          console.log(randomWord);
+          console.log("bad");
+          addManPart();
+        }
+      });
+    });
   };
 
   return (
@@ -50,7 +66,7 @@ export default function Home() {
                 <Letter
                   key={index}
                   letter={letter}
-                  showLetter={index == 0 ? true : false}
+                  showLetter={index == 0 || letter == word[0] ? true : false}
                 />
               ))}
             </div>

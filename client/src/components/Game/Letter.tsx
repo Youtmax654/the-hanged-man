@@ -6,7 +6,6 @@ type LetterProps = {
 };
 
 const Letter: React.FC<LetterProps> = ({ letter, showLetter }) => {
-  letter = letter.toUpperCase();
   return (
     <div className="flex flex-col relative">
       {showLetter && (

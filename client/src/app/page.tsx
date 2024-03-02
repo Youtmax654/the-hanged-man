@@ -1,7 +1,7 @@
 "use client";
 
 import GameHangedMan from "@/components/Game/GameHangedMan";
-import Line from "@/components/Game/Line";
+import Letter from "@/components/Game/Letter";
 import Description from "@/components/Main/Description";
 import MainHangedMan from "@/components/Main/MainHangedMan";
 import Title from "@/components/Main/Title";
@@ -46,8 +46,12 @@ export default function Home() {
           <div className="flex flex-1 items-end justify-around">
             <GameHangedMan step={step} />
             <div className="flex gap-10 h-full items-center">
-              {word.split("").map((i) => (
-                <Line key={i} />
+              {word.split("").map((letter, index) => (
+                <Letter
+                  key={index}
+                  letter={letter}
+                  showLetter={index == 0 ? true : false}
+                />
               ))}
             </div>
           </div>

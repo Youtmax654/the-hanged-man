@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "./animations.css";
+
+:root {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
+#mainHangedMan {
+  animation: Swing ease-in-out 3s infinite;
+  transform-origin: top center;
+}

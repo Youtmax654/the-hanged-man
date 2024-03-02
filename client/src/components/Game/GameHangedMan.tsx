@@ -59,7 +59,8 @@ const GameHangedMan: React.FC<GameHangedManProps> = ({ step }) => {
   const visibleManParts = manParts.slice(0, step);
 
   return (
-    <div className="absolute bottom-0 left-20">
+    // <div className="absolute bottom-0 left-20">
+    <div>
       <Image src="/Stand.svg" alt="Stand" width={400} height={790} />
       {visibleManParts}
     </div>

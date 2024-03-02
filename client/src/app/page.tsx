@@ -1,11 +1,13 @@
 "use client";
 
 import GameHangedMan from "@/components/Game/GameHangedMan";
+import Line from "@/components/Game/Line";
 import Description from "@/components/Main/Description";
 import MainHangedMan from "@/components/Main/MainHangedMan";
 import Title from "@/components/Main/Title";
 import Button from "@/components/UI/Button";
-import { useEffect, useState } from "react";
+import axios from "axios";
+import { useState } from "react";
 
 export default function Home() {
   const [page, setPage] = useState("Main");
@@ -13,20 +15,15 @@ export default function Home() {
   const [word, setWord] = useState("");
 
   const handlePlay = () => {
+    axios.get("http://localhost:8080/api/fr/word").then((response) => {
+      setWord(response.data.word);
+    });
     setPage("Game");
   };
 
   const addManPart = () => {
     setStep(step + 1);
   };
-
-  useEffect(() => {
-    fetch("http://localhost:8080/api/fr/word")
-      .then((response) => response.json())
-      .then((data) => {
-        setWord(data.word);
-      });
-  });
 
   return (
     <>
@@ -42,10 +39,17 @@ export default function Home() {
       )}
 
       {page === "Game" && (
-        <div className="flex justify-center mt-11">
-          <Title value="LE PENDU" className="text-[100px]" />
-          <div>
+        <div className="flex flex-col h-screen">
+          <div className="flex h-[150px] justify-center pt-11">
+            <Title value="LE PENDU" className="text-[100px]" />
+          </div>
+          <div className="flex flex-1 items-end justify-around">
             <GameHangedMan step={step} />
+            <div className="flex gap-10 h-full items-center">
+              {word.split("").map((i) => (
+                <Line key={i} />
+              ))}
+            </div>
           </div>
         </div>
       )}

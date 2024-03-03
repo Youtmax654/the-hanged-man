@@ -1,10 +1,10 @@
 import Image from "next/image";
 
-type GameHangedManProps = {
+type Props = {
   step: number;
 };
 
-const GameHangedMan: React.FC<GameHangedManProps> = ({ step }) => {
+const GameHangedMan: React.FC<Props> = ({ step }) => {
   const manParts = [
     <Image
       key={"Head"}
@@ -59,7 +59,6 @@ const GameHangedMan: React.FC<GameHangedManProps> = ({ step }) => {
   const visibleManParts = manParts.slice(0, step);
 
   return (
-    // <div className="absolute bottom-0 left-20">
     <div className="relative">
       <Image src="/Stand.svg" alt="Stand" width={400} height={790} />
       {visibleManParts}

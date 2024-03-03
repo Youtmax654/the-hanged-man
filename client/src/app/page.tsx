@@ -23,19 +23,13 @@ export default function Home() {
   const [wrongLetters, setWrongLetters] = useState<string[]>([]);
   const [gameOver, setGameOver] = useState(false);
 
+  const handlePlay = () => {
+    setPage("Game");
+  };
+
   const handleKeyDown = (e: KeyboardEvent) => {
     const guessLetter = e.key.toUpperCase();
     setGuessedLetter(guessLetter);
-  };
-
-  const handlePlay = () => {
-    axios.get("http://localhost:8080/api/fr/word").then((response) => {
-      const randomWord = response.data.word.toUpperCase();
-      setWord(randomWord);
-      setPage("Game");
-
-      window.addEventListener("keydown", handleKeyDown);
-    });
   };
 
   const addManPart = () => {
@@ -43,10 +37,20 @@ export default function Home() {
   };
 
   useEffect(() => {
+    axios.get("http://localhost:8080/api/fr/word").then((response) => {
+      const randomWord = response.data.word.toUpperCase();
+      setWord(randomWord);
+    });
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
     if (!rightLetters.includes(word[0])) {
       setRightLetters((prevLetters) => [...prevLetters, word[0]]);
     }
+  }, [word]);
 
+  useEffect(() => {
     if (!isALetter(guessedLetter)) return;
 
     if (word.includes(guessedLetter) && !rightLetters.includes(guessedLetter)) {
@@ -62,14 +66,10 @@ export default function Home() {
       addManPart();
     }
 
-    if (step == 6) {
+    if (step >= 5) {
       setGameOver(true);
     }
-
-    if (gameOver) {
-      window.removeEventListener("keydown", handleKeyDown);
-    }
-  }, [word, guessedLetter]);
+  }, [guessedLetter]);
 
   return (
     <>

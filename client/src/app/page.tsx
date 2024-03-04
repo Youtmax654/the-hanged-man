@@ -2,6 +2,7 @@
 
 import GameHangedMan from "@/components/Game/GameHangedMan";
 import Letter from "@/components/Game/Letter";
+import Popup from "@/components/Game/Popup";
 import WrongLetters from "@/components/Game/WrongLetters";
 import Description from "@/components/Main/Description";
 import MainHangedMan from "@/components/Main/MainHangedMan";
@@ -22,9 +23,21 @@ export default function Home() {
   const [rightLetters, setRightLetters] = useState<string[]>([]);
   const [wrongLetters, setWrongLetters] = useState<string[]>([]);
   const [gameOver, setGameOver] = useState(false);
+  const [victory, setVictory] = useState(false);
+  const wordLetters = word.split("");
 
   const handlePlay = () => {
     setPage("Game");
+    setGameOver(false);
+    setVictory(false);
+    setStep(0);
+    setRightLetters([]);
+    setWrongLetters([]);
+    setGuessedLetter("");
+    axios.get("http://localhost:8080/api/fr/word").then((response) => {
+      const randomWord = response.data.word.toUpperCase();
+      setWord(randomWord);
+    });
   };
 
   const handleKeyDown = (e: KeyboardEvent) => {
@@ -32,16 +45,14 @@ export default function Home() {
     setGuessedLetter(guessLetter);
   };
 
+  const getScore = () => {
+    const score = 100 - (100 * step) / 6;
+    return Math.round(score);
+  };
+
   const addManPart = () => {
     setStep((prevStep) => prevStep + 1);
   };
-
-  useEffect(() => {
-    axios.get("http://localhost:8080/api/fr/word").then((response) => {
-      const randomWord = response.data.word.toUpperCase();
-      setWord(randomWord);
-    });
-  }, []);
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
@@ -51,7 +62,7 @@ export default function Home() {
   }, [word]);
 
   useEffect(() => {
-    if (!isALetter(guessedLetter)) return;
+    if (!isALetter(guessedLetter) || gameOver) return;
 
     if (word.includes(guessedLetter) && !rightLetters.includes(guessedLetter)) {
       setRightLetters((prevLetters) => {
@@ -65,11 +76,22 @@ export default function Home() {
       setWrongLetters((prevLetters) => [...prevLetters, guessedLetter]);
       addManPart();
     }
+  }, [guessedLetter]);
 
-    if (step >= 5) {
+  useEffect(() => {
+    if (step >= 6) {
       setGameOver(true);
     }
-  }, [guessedLetter]);
+  }, [wrongLetters]);
+
+  useEffect(() => {
+    wordLetters.map((letter) => {
+      if (!rightLetters.includes(letter)) return;
+      if (wordLetters.every((l) => rightLetters.includes(l))) {
+        setVictory(true);
+      }
+    });
+  }, [rightLetters]);
 
   return (
     <>
@@ -93,7 +115,7 @@ export default function Home() {
             <GameHangedMan step={step} />
             <div className="relative flex h-full items-end">
               <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 items-center gap-10">
-                {word.split("").map((letter, index) => (
+                {wordLetters.map((letter, index) => (
                   <Letter
                     key={index}
                     letter={letter}
@@ -104,6 +126,10 @@ export default function Home() {
               <WrongLetters wrongLetters={wrongLetters} />
             </div>
           </div>
+          {gameOver && <Popup gameOver word={word} replay={handlePlay} />}
+          {victory && (
+            <Popup gameOver={false} score={getScore()} replay={handlePlay} />
+          )}
         </div>
       )}
     </>

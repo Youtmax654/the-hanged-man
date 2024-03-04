@@ -12,17 +12,18 @@ import Button from "@/components/UI/Button";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
+const language =
+  typeof navigator !== "undefined" ? navigator.language : "en-US";
+
 const isALetter = (l: string) => {
   return l.length === 1 && l.match(/[a-zA-Z]/i);
 };
 
 const getCodeLanguage = () => {
-  const language = navigator.language;
   return language.split("-")[1].toLowerCase();
 };
 
 const getLanguage = () => {
-  const language = navigator.language;
   return language.split("-")[0].toUpperCase();
 };
 

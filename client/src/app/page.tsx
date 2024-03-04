@@ -5,6 +5,7 @@ import Letter from "@/components/Game/Letter";
 import Popup from "@/components/Game/Popup";
 import WrongLetters from "@/components/Game/WrongLetters";
 import Description from "@/components/Main/Description";
+import LanguageSelector from "@/components/Main/LanguageSelector";
 import MainHangedMan from "@/components/Main/MainHangedMan";
 import Title from "@/components/Main/Title";
 import Button from "@/components/UI/Button";
@@ -13,6 +14,16 @@ import { useEffect, useState } from "react";
 
 const isALetter = (l: string) => {
   return l.length === 1 && l.match(/[a-zA-Z]/i);
+};
+
+const getCodeLanguage = () => {
+  const language = navigator.language;
+  return language.split("-")[1].toLowerCase();
+};
+
+const getLanguage = () => {
+  const language = navigator.language;
+  return language.split("-")[0].toUpperCase();
 };
 
 export default function Home() {
@@ -24,6 +35,10 @@ export default function Home() {
   const [wrongLetters, setWrongLetters] = useState<string[]>([]);
   const [gameOver, setGameOver] = useState(false);
   const [victory, setVictory] = useState(false);
+  const [language, setLanguage] = useState({
+    code: getCodeLanguage(),
+    language: getLanguage(),
+  });
   const wordLetters = word.split("");
 
   const handlePlay = () => {
@@ -34,10 +49,17 @@ export default function Home() {
     setRightLetters([]);
     setWrongLetters([]);
     setGuessedLetter("");
-    axios.get("http://localhost:8080/api/fr/word").then((response) => {
-      const randomWord = response.data.word.toUpperCase();
-      setWord(randomWord);
-    });
+    if (language.code === "fr") {
+      axios.get("http://localhost:8080/api/fr/word").then((response) => {
+        const randomWord = response.data.word.toUpperCase();
+        setWord(randomWord);
+      });
+    } else if (language.code === "us") {
+      axios.get("http://localhost:8080/api/en/word").then((response) => {
+        const randomWord = response.data.word.toUpperCase();
+        setWord(randomWord);
+      });
+    }
   };
 
   const handleKeyDown = (e: KeyboardEvent) => {
@@ -62,7 +84,7 @@ export default function Home() {
   }, [word]);
 
   useEffect(() => {
-    if (!isALetter(guessedLetter) || gameOver) return;
+    if (!isALetter(guessedLetter) || gameOver || victory) return;
 
     if (word.includes(guessedLetter) && !rightLetters.includes(guessedLetter)) {
       setRightLetters((prevLetters) => {
@@ -103,12 +125,19 @@ export default function Home() {
             <Button value="Jouer" onClick={handlePlay} />
           </div>
           <MainHangedMan />
+          <LanguageSelector
+            language={language}
+            setLanguage={(code, language) => setLanguage({ code, language })}
+          />
         </div>
       )}
 
       {page === "Game" && (
         <div className="flex h-screen flex-col">
-          <div className="flex h-[150px] justify-center pt-11">
+          <div
+            className="flex h-[150px] cursor-pointer select-none justify-center pt-11"
+            onClick={() => setPage("Main")}
+          >
             <Title value="LE PENDU" className="text-[100px]" />
           </div>
           <div className="flex flex-1 items-end justify-around">

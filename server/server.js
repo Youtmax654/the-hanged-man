@@ -9,7 +9,7 @@ const getRandomWord = (filename, callback) => {
     if (err) {
       throw err;
     } else {
-      const words = data.split("");
+      const words = data.split("\n");
       const randomIndex = Math.floor(Math.random() * words.length);
       callback(words[randomIndex]);
     }

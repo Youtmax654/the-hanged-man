@@ -1,8 +1,13 @@
 const express = require("express");
+const cron = require("node-cron");
 const app = express();
 const cors = require("cors");
 const fs = require("fs");
 const PORT = 8080;
+
+const cronMessage = () => {
+  console.log("Cron job executed at:", new Date().toLocaleString());
+}
 
 const getRandomWord = (filename, callback) => {
   fs.readFile("./words/" + filename, "utf-8", (err, data) => {
@@ -30,8 +35,8 @@ app.get("/api/en/word", (req, res) => {
   });
 })
 
-app.get("/api/cron", (req, res) => {
-  res.json({ "status": "success" });
+cron.schedule("15 * * * *", () => {
+  cronMessage();
 });
 
 app.listen(PORT, () => {

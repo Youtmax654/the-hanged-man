@@ -5,9 +5,10 @@ import FlagIcon from "../UI/FlagIcon";
 type Props = {
   language: { code: string; language: string };
   setLanguage: (code: string, language: string) => void;
+  i18n: any;
 };
 
-const LanguageSelector: React.FC<Props> = ({ language, setLanguage }) => {
+const LanguageSelector: React.FC<Props> = ({ language, setLanguage, i18n }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const languages = [
@@ -44,6 +45,7 @@ const LanguageSelector: React.FC<Props> = ({ language, setLanguage }) => {
               className="flex cursor-pointer flex-row gap-1 p-2 hover:bg-gray-200"
               onClick={() => {
                 setLanguage(lang.code, lang.language);
+                i18n.changeLanguage(lang.code);
                 setIsOpen(false);
               }}
             >

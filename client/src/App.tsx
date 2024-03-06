@@ -1,7 +1,6 @@
-"use client";
-
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import GameHangedMan from "./components/Game/GameHangedMan";
 import Letter from "./components/Game/Letter";
 import Popup from "./components/Game/Popup";
@@ -29,6 +28,8 @@ const getLanguage = () => {
 };
 
 export default function Home() {
+  const { i18n, t } = useTranslation();
+
   const [page, setPage] = useState("Main");
   const [step, setStep] = useState(0);
   const [word, setWord] = useState("");
@@ -127,22 +128,23 @@ export default function Home() {
     <>
       {page === "Main" && (
         <div className="flex h-full justify-evenly">
-          <div className="flex h-full flex-col items-start justify-center gap-20">
-            <Title value="LE PENDU" className="text-[150px]" />
-            <Description value="Devinez les mots, évitez le pendu dans ce jeu classique revisité pour le web. Êtes-vous prêt pour le défi linguistique?" />
-            <Button value="Jouer" onClick={handlePlay} />
+          <div className="flex h-full flex-col items-start justify-center gap-20 w-[900px]">
+            <Title value={t("title")} className="text-[120px]" />
+            <Description value={t("description")} />
+            <Button value={t("play")} onClick={handlePlay} />
           </div>
           <MainHangedMan />
           <LanguageSelector
             language={language}
             setLanguage={(code, language) => setLanguage({ code, language })}
+            i18n={i18n}
           />
         </div>
       )}
 
       {page === "Loading" && (
         <div className="flex justify-center items-center h-full">
-          <Loader value="Chargement..." />
+          <Loader />
         </div>
       )}
 
@@ -152,7 +154,7 @@ export default function Home() {
             className="flex h-[150px] cursor-pointer select-none justify-center pt-11"
             onClick={() => setPage("Main")}
           >
-            <Title value="LE PENDU" className="text-[100px]" />
+            <Title value={t("title")} className="text-[80px]" />
           </div>
           <div className="flex flex-1 items-end justify-around">
             <GameHangedMan step={step} />
@@ -169,9 +171,14 @@ export default function Home() {
               <WrongLetters wrongLetters={wrongLetters} />
             </div>
           </div>
-          {gameOver && <Popup gameOver word={word} replay={handlePlay} />}
+          {gameOver && <Popup gameOver word={word} replay={handlePlay} t={t} />}
           {victory && (
-            <Popup gameOver={false} score={getScore()} replay={handlePlay} />
+            <Popup
+              gameOver={false}
+              score={getScore()}
+              replay={handlePlay}
+              t={t}
+            />
           )}
         </div>
       )}

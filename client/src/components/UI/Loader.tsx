@@ -1,8 +1,4 @@
-type Props = {
-  value: string;
-};
-
-const Loader: React.FC<Props> = ({ value }) => {
+const Loader: React.FC = () => {
   return <div className="loader"></div>;
 };
 

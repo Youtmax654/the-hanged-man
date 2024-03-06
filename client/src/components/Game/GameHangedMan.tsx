@@ -1,12 +1,10 @@
-import Image from "next/image";
-
 type Props = {
   step: number;
 };
 
 const GameHangedMan: React.FC<Props> = ({ step }) => {
   const manParts = [
-    <Image
+    <img
       key={"Head"}
       src="/Head.svg"
       alt="Head"
@@ -14,7 +12,7 @@ const GameHangedMan: React.FC<Props> = ({ step }) => {
       height={0}
       className="absolute bottom-60 left-64"
     />,
-    <Image
+    <img
       key={"Body"}
       src="/Body.svg"
       alt="Body"
@@ -22,7 +20,7 @@ const GameHangedMan: React.FC<Props> = ({ step }) => {
       height={0}
       className="absolute bottom-[172px] left-[290px]"
     />,
-    <Image
+    <img
       key={"LeftArm"}
       src="/LeftArm.svg"
       alt="LeftArm"
@@ -30,7 +28,7 @@ const GameHangedMan: React.FC<Props> = ({ step }) => {
       height={0}
       className="absolute bottom-[196px] left-[260px]"
     />,
-    <Image
+    <img
       key={"RightArm"}
       src="/RightArm.svg"
       alt="RightArm"
@@ -38,7 +36,7 @@ const GameHangedMan: React.FC<Props> = ({ step }) => {
       height={0}
       className="absolute bottom-[192px] left-[403px]"
     />,
-    <Image
+    <img
       key={"LeftLeg"}
       src="/LeftLeg.svg"
       alt="LeftLeg"
@@ -46,7 +44,7 @@ const GameHangedMan: React.FC<Props> = ({ step }) => {
       height={0}
       className="absolute bottom-[122px] left-[286px]"
     />,
-    <Image
+    <img
       key={"RightLeg"}
       src="/RightLeg.svg"
       alt="RightLeg"
@@ -60,7 +58,7 @@ const GameHangedMan: React.FC<Props> = ({ step }) => {
 
   return (
     <div className="relative">
-      <Image src="/Stand.svg" alt="Stand" width={400} height={790} />
+      <img src="/Stand.svg" alt="Stand" width={400} height={790} />
       {visibleManParts}
     </div>
   );

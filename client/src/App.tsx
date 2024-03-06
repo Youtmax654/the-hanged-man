@@ -1,16 +1,17 @@
 "use client";
 
-import GameHangedMan from "@/components/Game/GameHangedMan";
-import Letter from "@/components/Game/Letter";
-import Popup from "@/components/Game/Popup";
-import WrongLetters from "@/components/Game/WrongLetters";
-import Description from "@/components/Main/Description";
-import LanguageSelector from "@/components/Main/LanguageSelector";
-import MainHangedMan from "@/components/Main/MainHangedMan";
-import Title from "@/components/Main/Title";
-import Button from "@/components/UI/Button";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import GameHangedMan from "./components/Game/GameHangedMan";
+import Letter from "./components/Game/Letter";
+import Popup from "./components/Game/Popup";
+import WrongLetters from "./components/Game/WrongLetters";
+import Description from "./components/Main/Description";
+import LanguageSelector from "./components/Main/LanguageSelector";
+import MainHangedMan from "./components/Main/MainHangedMan";
+import Title from "./components/Main/Title";
+import Button from "./components/UI/Button";
+import Loader from "./components/UI/Loader";
 
 const language =
   typeof navigator !== "undefined" ? navigator.language : "en-US";
@@ -43,7 +44,7 @@ export default function Home() {
   const wordLetters = word.split("");
 
   const handlePlay = () => {
-    setPage("Game");
+    setPage("Loading");
     setGameOver(false);
     setVictory(false);
     setStep(0);
@@ -51,15 +52,21 @@ export default function Home() {
     setWrongLetters([]);
     setGuessedLetter("");
     if (language.code === "fr") {
-      axios.get("http://localhost:8080/api/fr/word").then((response) => {
-        const randomWord = response.data.word.toUpperCase();
-        setWord(randomWord);
-      });
+      axios
+        .get("https://the-hanged-man.onrender.com/api/fr/word")
+        .then((response) => {
+          setPage("Game");
+          const randomWord = response.data.word.toUpperCase();
+          setWord(randomWord);
+        });
     } else if (language.code === "us") {
-      axios.get("http://localhost:8080/api/en/word").then((response) => {
-        const randomWord = response.data.word.toUpperCase();
-        setWord(randomWord);
-      });
+      axios
+        .get("https://the-hanged-man.onrender.com/api/en/word")
+        .then((response) => {
+          setPage("Game");
+          const randomWord = response.data.word.toUpperCase();
+          setWord(randomWord);
+        });
     }
   };
 
@@ -130,6 +137,12 @@ export default function Home() {
             language={language}
             setLanguage={(code, language) => setLanguage({ code, language })}
           />
+        </div>
+      )}
+
+      {page === "Loading" && (
+        <div className="flex justify-center items-center h-full">
+          <Loader value="Chargement..." />
         </div>
       )}
 

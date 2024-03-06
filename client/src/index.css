@@ -13,6 +13,10 @@ body {
   overflow: hidden;
 }
 
+#root {
+  height: 100%;
+}
+
 #mainHangedMan {
   animation: Swing ease-in-out 3s infinite;
   transform-origin: top center;

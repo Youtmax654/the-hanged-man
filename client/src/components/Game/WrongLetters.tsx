@@ -10,7 +10,7 @@ type Props = {
 };
 
 const WrongLetters: React.FC<Props> = ({ wrongLetters }) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   const handleOpen = () => {
     setOpen(!open);

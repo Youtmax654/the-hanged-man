@@ -147,7 +147,7 @@ export default function Home() {
       )}
 
       {page === "Game" && (
-        <div className="flex h-screen flex-col">
+        <div className="flex h-full flex-col">
           <div
             className="flex h-[150px] cursor-pointer select-none justify-center pt-11"
             onClick={() => setPage("Main")}

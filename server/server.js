@@ -35,7 +35,7 @@ app.get("/api/en/word", (req, res) => {
   });
 })
 
-cron.schedule("15 * * * *", () => {
+cron.schedule("*/5 * * * *", () => {
   cronMessage();
 });
 

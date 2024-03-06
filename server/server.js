@@ -30,6 +30,10 @@ app.get("/api/en/word", (req, res) => {
   });
 })
 
+app.get("/api/cron", (req, res) => {
+  res.json({ "status": "success" });
+});
+
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
 });
